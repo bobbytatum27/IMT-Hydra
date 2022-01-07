@@ -1,6 +1,8 @@
-Abstract Class Cam inherits from Sensor, ABC
+**Todo - logging events, logging data collected, logging data i/o**
 
-Member Fields
+# Abstract Class Cam inherits from Sensor, ABC
+
+### Member Fields
 - camera: EasyPySpin.VideoCapture
 - exposure: int
 - gain: int
@@ -15,7 +17,7 @@ Member Fields
 - buffer_size: int
 - buffer: Deque
 
-Methods inherited from Sensor
+### Methods inherited from Sensor
 - power_on()
     - creates a camera reference and stores it in the appropriate member variable
 - power_off()
@@ -26,17 +28,15 @@ Methods inherited from Sensor
     - abstract method (see Python's ABC)
 - 
 
-Member Methods
+### Member Methods
 - set_state(next_state: Enum {Quiescent, Storm, Event})
     - changes the state of the cam to the passed parameter
 - detect_event()
     - abstract method
 
-# Todo - logging events, logging data collected, logging data i/o
+# class BubbleCam inherits from Cam
 
-class BubbleCam inherits from Cam
-
-Member Fields inherited from Cam
+### Member Fields inherited from Cam
 - camera: EasyPySpin.VideoCapture
 - exposure: int
 - gain: int
@@ -51,7 +51,7 @@ Member Fields inherited from Cam
 - buffer_size: int
 - buffer: Deque
 
-Methods inherited from Sensor
+### Methods inherited from Sensor
 - power_on()
     - creates a camera reference and stores it in the appropriate member variable
 - power_off()
@@ -61,7 +61,7 @@ Methods inherited from Sensor
 - collect_data()
     - abstract method (see Python's ABC)
 
-Member Methods inherited from Cam
+### Member Methods inherited from Cam
 - set_state(next_state: Enum {Quiescent, Storm, Event})
     - changes the state of the cam to the passed parameter
 - detect_event()
