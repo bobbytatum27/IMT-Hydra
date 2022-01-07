@@ -26,7 +26,6 @@
     - abstract method (see Python's ABC)
 - collect_data()
     - abstract method (see Python's ABC)
-- 
 
 ### Member Methods
 - set_state(next_state: Enum {Quiescent, Storm, Event})
