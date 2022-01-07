@@ -13,7 +13,6 @@
 - current_state: Enum {Quiescent, Storm, Event}
 - event_delay: int
 - image_type: String
-// Maybe we can increase the buffer size so we only wrtie once every ~ hr for white cap cam?
 - buffer_size: int
 - buffer: Deque
 
@@ -46,19 +45,18 @@
 - current_state: Enum {Quiescent, Storm, Event}
 - event_delay: int
 - image_type: String
-// Maybe we can increase the buffer size so we only wrtie once every ~ hr for white cap cam?
 - buffer_size: int
 - buffer: Deque
 
-### Methods inherited from Sensor
+### Methods inherited from Sensor (via Cam)
 - power_on()
     - creates a camera reference and stores it in the appropriate member variable
 - power_off()
     - a call to the camera reference's release() method; see cSBC.py
 - write_data(file_handler?)
-    - abstract method (see Python's ABC)
+    - write the data in the buffer to file
 - collect_data()
-    - abstract method (see Python's ABC)
+    - continuously log data in a double-ended queue.
 
 ### Member Methods inherited from Cam
 - set_state(next_state: Enum {Quiescent, Storm, Event})
