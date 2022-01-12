@@ -82,19 +82,19 @@ class Cam(Sensor, ABC):
 		"""
 		self.camera.release()
 	
-	def write_data(file_handler):
+	def write_data(self, file_handler):
 		...
 
-	def collect_data():
+	def collect_data(self):
 		...
 	
 	# Cam Member methods
 
-	def set_state(next_state: State):
+	def set_state(self, next_state: State):
 		"""
 		Changes the state of the cam to the passed parameter
 		"""
 		self.current_state = next_state
 	
-	def detect_event():
+	def detect_event(self):
 		...
