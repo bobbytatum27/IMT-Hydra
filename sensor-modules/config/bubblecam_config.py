@@ -24,4 +24,12 @@ GAMMA = 0.25
 FPS = 8
 BACKLIGHT = 1
 
+########### Logging Constants ###########
+# Name of file to log to
+LOG_FILE = "logs/cSBC.log"
+FILEMODE = "w"
+LOGGER_NAME = "cSBC Logger"
+DATE_FORMAT = "%Y-%m-%dT%H:%M:%S"
+MESSAGE_FORMAT = "%(asctime)s.%(msecs)03d # %(name)s # %(levelname)s # %(message)s"
+
 

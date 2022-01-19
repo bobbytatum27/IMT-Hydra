@@ -4,7 +4,8 @@ from .state import State # Enums: {Quiescent, Storm, Event}
 # Copied from cSBC (Will remove unused modules as necessary)
 import os
 import cv2
-# import logging
+import logging
+import datetime
 import EasyPySpin
 import multiprocessing as mp
 from collections import deque
@@ -66,12 +67,35 @@ class BubbleCam(Cam):
 				buffer: deque):
 		super().__init__(camera, exposure, gain, brightness, fps, backlight, 
 						current_state, event_delay, image_type, buffer_size, buffer)
-		# If we do this might not need current_state?
+
+		# Create logger
+		logging.basicConfig(
+			filename=LOG_FILE,
+			filemode=FILEMODE,
+			format=MESSAGE_FORMAT,
+			datefmt=DATE_FORMAT,
+			level=logging.DEBUG,
+    	)
+
+		logger = logging.getLogger()
+		logger.debug(f"Logger created for {__file__}.")
 		
+		# Create a shared variable to track state across processes
+		self.shared_state = mp.Value("i", current_state)
 
+		# Start another process to run collect_data() in the background 
+		p1 = mp.Process(
+            target=self.collect_data,
+            args=(self.shared_state),
+        )
 
+		p1.start()
+
+		# The process will run until the instance of BubbleCam is deleted and p1.join() will automatically run
+		# A potential fix to this would be to check current_state at initialization and during set_state()
+		# and only start the process when appropriate (Storm, Event).
+		
 	# Methods inherited from Sensor via Cam
-
 	def power_on(self):
 		"""
 		Creates a camera reference and stores it in the appropriate member variable
@@ -96,46 +120,61 @@ class BubbleCam(Cam):
 		"""
 		Write the data in the buffer to file
 		"""
+
+		# Create a new directory for this event
+		dtime_str = self.getDateTimeIso()
+		dtime_path = os.path.join(IMG_DIR, dtime_str)
+		os.mkdir(dtime_path)
+
 		try:
 			# number images in order
 			num_captured = 0
-			# create new dir to store images for this event
-			# dtime_path = createDatetimePath()
 
 			# reverse rolling buffer to get last image captured first and write to disk
 			for img in list(reversed(self.buffer)):
 				img_str = f"img_{num_captured}" + IMG_TYPE
-				img.tofile(os.path.join("Test Datetime", img_str))
+				img.tofile(os.path.join(dtime_path, img_str)) 
+
 				# increment counters and log write
-				file_handler.value += 1
 				num_captured += 1
 
+			self.logger.debug(f"Wrote {num_captured} images to disk at {dtime_path}.")
 			return num_captured
 		except:
-			# logger.error("Exception occurred", exc_info=True)
-			print("exception occurred")
+			self.logger.error("Exception occurred", exc_info=True)
 
-	def collect_data(self):
+	def collect_data(self, shared_state):
 		"""
 		Continuously log data in a double-ended queue.
 		"""
-		try:
+		try:	
 			while True:
-				# in standby read frame, encode image, append to rolling buffer
-				success, frame = self.camera.read()
-				result, img = cv2.imencode(IMG_TYPE, frame)
-				self.buffer.append(img)
+				if shared_state.value == State.Storm:
+					# in Storm state read frame, encode image, append to rolling buffer
+					success, frame = self.camera.read()
+					result, img = cv2.imencode(IMG_TYPE, frame)
+					self.buffer.append(img)
+				elif shared_state.value == State.Event:
+					# in Event state, call write_data() to store data on disk
+					if self.buffer:
+						self.logger.debug(f"Writing images to disk.")
+						self.write_data() # pass in some file_handler  
+						self.buffer.clear
+						self.logger.debug(f"Clear buffer.")
+					else:
+						self.logger.debug(f"Buffer empty. Did nothing.")
+
+					# change state to Storm
+					with self.shared_state.get_lock():
+						self.shared_state.val = State.Storm
 		except:
-			# logger.error("Exception occurred", exc_info=True)
-			print("exception occurred")
+			self.logger.error("Exception occurred", exc_info=True)
 		# release the camera and exit
 		finally:
 			self.camera.release()
-			# logger.info("Successfully released camera.")
-			print("camera released")
+			self.logger.info("Successfully released camera.")
 		
 	# Bubblecam member methods inherited from Cam
-
 	def set_state(self, next_state: State):
 		"""
 		Changes the state of the cam to the passed parameter
@@ -147,5 +186,16 @@ class BubbleCam(Cam):
 		Triggers the Bubble Cam event response -> collects data and logs event time
 		"""
 		...
-		self.write_data() # pass some file handler in here
-		# log time
+
+		# set current_state to event 
+		self.set_state(State.Event)
+
+		# set shared_state to event (must get lock first)
+		with self.shared_state.get_lock():
+			self.shared_state.val = State.Event
+
+		self.logger.info(f"Event triggered at {self.getDateTimeIso()}")
+
+	# Misc Helpers
+	def getDateTimeIso():
+		return datetime.datetime.now().isoformat()
