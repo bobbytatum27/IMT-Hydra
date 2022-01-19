@@ -1,13 +1,10 @@
 from .cam import Cam
+from .state import State # Enums: {Quiescent, Storm, Event}
 
 # Copied from cSBC (Will remove unused modules as necessary)
 import os
 import cv2
-import time
-import socket
-import shutil
-import logging
-import datetime
+# import logging
 import EasyPySpin
 import multiprocessing as mp
 from collections import deque
@@ -69,6 +66,8 @@ class BubbleCam(Cam):
 				buffer: deque):
 		super().__init__(camera, exposure, gain, brightness, fps, backlight, 
 						current_state, event_delay, image_type, buffer_size, buffer)
+		# If we do this might not need current_state?
+		
 
 
 	# Methods inherited from Sensor via Cam
@@ -97,14 +96,44 @@ class BubbleCam(Cam):
 		"""
 		Write the data in the buffer to file
 		"""
-		...
+		try:
+			# number images in order
+			num_captured = 0
+			# create new dir to store images for this event
+			# dtime_path = createDatetimePath()
 
-	def collect_data():
+			# reverse rolling buffer to get last image captured first and write to disk
+			for img in list(reversed(self.buffer)):
+				img_str = f"img_{num_captured}" + IMG_TYPE
+				img.tofile(os.path.join("Test Datetime", img_str))
+				# increment counters and log write
+				file_handler.value += 1
+				num_captured += 1
+
+			return num_captured
+		except:
+			# logger.error("Exception occurred", exc_info=True)
+			print("exception occurred")
+
+	def collect_data(self):
 		"""
 		Continuously log data in a double-ended queue.
 		"""
-		...
-	
+		try:
+			while True:
+				# in standby read frame, encode image, append to rolling buffer
+				success, frame = self.camera.read()
+				result, img = cv2.imencode(IMG_TYPE, frame)
+				self.buffer.append(img)
+		except:
+			# logger.error("Exception occurred", exc_info=True)
+			print("exception occurred")
+		# release the camera and exit
+		finally:
+			self.camera.release()
+			# logger.info("Successfully released camera.")
+			print("camera released")
+		
 	# Bubblecam member methods inherited from Cam
 
 	def set_state(self, next_state: State):
@@ -118,3 +147,5 @@ class BubbleCam(Cam):
 		Triggers the Bubble Cam event response -> collects data and logs event time
 		"""
 		...
+		self.write_data() # pass some file handler in here
+		# log time
