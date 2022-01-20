@@ -1,18 +1,19 @@
-from .cam import Cam
-from .state import State # Enums: {Quiescent, Storm, Event}
-
-# Copied from cSBC (Will remove unused modules as necessary)
+# Python Standard Library Modules
 import os
-import cv2
 import logging
 import datetime
-import EasyPySpin
 import multiprocessing as mp
 from collections import deque
 
-# import constants for this file
-from config.bubblecam_config import *
+# Copied from cSBC (Will remove unused modules as necessary)
+# Third Party Modules
+import cv2
+import EasyPySpin
 
+# Local Modules
+from config.bubblecam_config import * # Cam config constants
+from .cam import Cam
+from .state import State # Enums: {Quiescent, Storm, Event}
 
 class BubbleCam(Cam):
 	"""

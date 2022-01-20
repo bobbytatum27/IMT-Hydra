@@ -1,9 +1,13 @@
-from .sensor import Sensor # Abstract class Sensor
-from .state import State # Enums: {Quiescent, Storm, Event}
-import EasyPySpin # PySpin Module
-
+# Python Standard Library Modules
 from abc import ABC, abstractmethod
 from collections import deque
+
+# Third Party Modules
+import EasyPySpin # PySpin Module
+
+# Local Modules
+from .sensor import Sensor # Abstract class Sensor
+from .state import State # Enums: {Quiescent, Storm, Event}
 
 class Cam(Sensor, ABC):
 	"""
