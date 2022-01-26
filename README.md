@@ -15,6 +15,7 @@ Repository Structure:
   - [ ] Determine byte threshold for "interesting" Bubble Cam images
   - [ ] Determine i/o speed for a completely full buffer
 - [ ] Revise Bubble Cam Implementation Method Names/Inheritance Hierarchy
+  - [ ] Determine list of all sensors that we can actually power on/off
 - [ ] Implement Foam Cam
 - [ ] Implement Whitecap Cam
   - [ ] Change event trigger to a timer
