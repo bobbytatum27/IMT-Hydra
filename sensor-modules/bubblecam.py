@@ -121,6 +121,15 @@ class BubbleCam(Cam):
 		Write the data in the buffer to file
 		"""
 
+
+		"""
+		TODO: Implement a check for image byte size. Must be above a threshold to be valid to write (dont want poor quality to 
+				take up space). https://jdhao.github.io/2019/07/06/python_opencv_pil_image_to_bytes/ 
+
+			  To get image size: img = cv2.imread('path/to/img',0) 
+			  					 height, width = img.shape[:2]
+		"""
+
 		# Create a new directory for this event
 		dtime_str = self.getDateTimeIso()
 		dtime_path = os.path.join(IMG_DIR, dtime_str)
