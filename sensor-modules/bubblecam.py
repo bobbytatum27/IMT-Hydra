@@ -155,8 +155,8 @@ class BubbleCam(Cam):
 					success, frame = self.camera.read()
 					result, img = cv2.imencode(IMG_TYPE, frame)
 					self.buffer.append(img)
-				elif shared_state.value == State.Event:
-					# in Event state, call write_data() to store data on disk
+				elif shared_state.value == State.WAVEBREAK:
+					# in Wavebreak Event state, call write_data() to store data on disk
 					if self.buffer:
 						self.logger.debug(f"Writing images to disk.")
 						self.write_data() # pass in some file_handler  
@@ -189,11 +189,11 @@ class BubbleCam(Cam):
 		...
 
 		# set current_state to event 
-		self.set_state(State.Event)
+		self.set_state(State.WAVEBREAK)
 
 		# set shared_state to event (must get lock first)
 		with self.shared_state.get_lock():
-			self.shared_state.val = State.Event
+			self.shared_state.val = State.WAVEBREAK
 
 		self.logger.info(f"Event triggered at {self.getDateTimeIso()}")
 

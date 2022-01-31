@@ -2,6 +2,7 @@ from enum import Enum
 
 # TODO(bobbytatum27): Header to explain Glider States (and who cares about them)
 class State(Enum):
-	Quiescent = 1
-	Storm = 2
-	Event = 3
+	LOW_POWER = 1
+	Quiescent = 2
+	Storm = 3
+	WAVEBREAK = 4
