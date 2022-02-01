@@ -49,7 +49,6 @@ class Cam(Sensor, ABC):
 
 	# Initialize Member Variables
 	def __init__(self, 
-				camera: EasyPySpin.VideoCapture, 
 				exposure: int, 
 				gain: int, 
 				brightness: int, 
@@ -60,7 +59,6 @@ class Cam(Sensor, ABC):
 				image_type: str,
 				buffer_size: int, 
 				buffer: deque):
-		self.camera = camera
 		self.exposure = exposure
 		self.gain = gain
 		self.brightness = brightness

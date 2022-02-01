@@ -50,12 +50,10 @@ class BubbleCam(Cam):
         changes the state of the cam to the passed parameter
     detect_event()
         triggers the Bubble Cam event response -> collects data and logs event time
-
     """
 
 	# Initialize Member Variables
-	def __init__(self, 
-				camera: EasyPySpin.VideoCapture, 
+	def __init__(self,  
 				exposure: int, 
 				gain: int, 
 				brightness: int, 
@@ -66,7 +64,7 @@ class BubbleCam(Cam):
 				image_type: str,
 				buffer_size: int, 
 				buffer: deque):
-		super().__init__(camera, exposure, gain, brightness, fps, backlight, 
+		super().__init__(exposure, gain, brightness, fps, backlight, 
 						current_state, event_delay, image_type, buffer_size, buffer)
 
 		# Create logger
@@ -101,21 +99,16 @@ class BubbleCam(Cam):
 		"""
 		Creates a camera reference and stores it in the appropriate member variable
 		"""
-		super()
+		super().power_on()
 
 		 # set the camera settings
+		 # TODO(punnkam): check if these should be values received in ctor
 		self.camera.set(cv2.CAP_PROP_EXPOSURE, EXPOSURE)
 		self.camera.set(cv2.CAP_PROP_GAIN, GAIN)
 		self.camera.set(cv2.CAP_PROP_BRIGHTNESS, BRIGHTNESS)
 		self.camera.set(cv2.CAP_PROP_GAMMA, GAMMA)
 		self.camera.set(cv2.CAP_PROP_FPS, FPS)
 		self.camera.set(cv2.CAP_PROP_BACKLIGHT, BACKLIGHT)
-
-	def power_off(self):
-		"""
-		A call to the camera reference's release() method
-		"""
-		super()
 	
 	def write_data(self, file_handler):
 		"""
@@ -174,20 +167,11 @@ class BubbleCam(Cam):
 		finally:
 			self.camera.release()
 			self.logger.info("Successfully released camera.")
-		
-	# Bubblecam member methods inherited from Cam
-	def set_state(self, next_state: State):
-		"""
-		Changes the state of the cam to the passed parameter
-		"""
-		super(State)
 	
 	def detect_event(self):
 		"""
 		Triggers the Bubble Cam event response -> collects data and logs event time
 		"""
-		...
-
 		# set current_state to event 
 		self.set_state(State.WAVEBREAK)
 
