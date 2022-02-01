@@ -45,7 +45,7 @@ class BubbleCam(Cam):
     write_data(file_handler?)
         write the data in the buffer to file
     collect_data()
-        continuously log data in a double-ended queue.
+        continuously log data in a double-ended queue
     set_state(next_state: Enum {Quiescent, Storm, Event})
         changes the state of the cam to the passed parameter
     detect_event()
@@ -101,14 +101,13 @@ class BubbleCam(Cam):
 		"""
 		super().power_on()
 
-		 # set the camera settings
-		 # TODO(punnkam): check if these should be values received in ctor
-		self.camera.set(cv2.CAP_PROP_EXPOSURE, EXPOSURE)
-		self.camera.set(cv2.CAP_PROP_GAIN, GAIN)
-		self.camera.set(cv2.CAP_PROP_BRIGHTNESS, BRIGHTNESS)
-		self.camera.set(cv2.CAP_PROP_GAMMA, GAMMA)
-		self.camera.set(cv2.CAP_PROP_FPS, FPS)
-		self.camera.set(cv2.CAP_PROP_BACKLIGHT, BACKLIGHT)
+		# set the camera settings
+		self.camera.set(cv2.CAP_PROP_EXPOSURE, self.exposure)
+		self.camera.set(cv2.CAP_PROP_GAIN, self.gain)
+		self.camera.set(cv2.CAP_PROP_BRIGHTNESS, self.brightness)
+		self.camera.set(cv2.CAP_PROP_GAMMA, self.gain)
+		self.camera.set(cv2.CAP_PROP_FPS, self.fps)
+		self.camera.set(cv2.CAP_PROP_BACKLIGHT, self.backlight)
 	
 	def write_data(self, file_handler):
 		"""
