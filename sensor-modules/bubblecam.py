@@ -62,10 +62,9 @@ class BubbleCam(Cam):
 				current_state: State,
 				event_delay: int,
 				image_type: str,
-				buffer_size: int, 
-				buffer: deque):
+				buffer_size: int):
 		super().__init__(exposure, gain, brightness, fps, backlight, 
-						current_state, event_delay, image_type, buffer_size, buffer)
+						current_state, event_delay, image_type, buffer_size)
 
 		# Create logger
 		logging.basicConfig(
@@ -83,16 +82,10 @@ class BubbleCam(Cam):
 		self.shared_state = mp.Value("i", current_state)
 
 		# Start another process to run collect_data() in the background 
-		p1 = mp.Process(
+		self.collect_data_proc = mp.Process(
             target=self.collect_data,
             args=(self.shared_state),
         )
-
-		p1.start()
-
-		# The process will run until the instance of BubbleCam is deleted and p1.join() will automatically run
-		# A potential fix to this would be to check current_state at initialization and during set_state()
-		# and only start the process when appropriate (Storm, Event).
 		
 	# Methods inherited from Sensor via Cam
 	def power_on(self):
@@ -108,8 +101,14 @@ class BubbleCam(Cam):
 		self.camera.set(cv2.CAP_PROP_GAMMA, self.gain)
 		self.camera.set(cv2.CAP_PROP_FPS, self.fps)
 		self.camera.set(cv2.CAP_PROP_BACKLIGHT, self.backlight)
+
+		# Start capturing images via another process
+		# The process will run until the instance of BubbleCam is deleted and p1.join() will automatically run.
+		# A potential fix to this would be to check current_state at initialization and during set_state()
+		# and only start the process when appropriate (Storm, Event).
+		self.collect_data_proc.start()
 	
-	def write_data(self, file_handler):
+	def write_data(self):
 		"""
 		Write the data in the buffer to file
 		"""
@@ -149,13 +148,13 @@ class BubbleCam(Cam):
 					self.buffer.append(img)
 				elif shared_state.value == State.WAVEBREAK:
 					# in Wavebreak Event state, call write_data() to store data on disk
-					if self.buffer:
+					if len(self.buffer) != 0:
 						self.logger.debug(f"Writing images to disk.")
 						self.write_data() # pass in some file_handler  
-						self.buffer.clear
+						self.buffer.clear()
 						self.logger.debug(f"Clear buffer.")
 					else:
-						self.logger.debug(f"Buffer empty. Did nothing.")
+						self.logger.debug(f"Buffer empty. Did not write any images to disk.")
 
 					# change state to Storm
 					with self.shared_state.get_lock():

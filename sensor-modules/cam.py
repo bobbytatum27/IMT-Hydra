@@ -57,8 +57,7 @@ class Cam(Sensor, ABC):
 				current_state: State,
 				event_delay: int,
 				image_type: str,
-				buffer_size: int, 
-				buffer: deque):
+				buffer_size: int):
 		self.exposure = exposure
 		self.gain = gain
 		self.brightness = brightness
@@ -68,7 +67,7 @@ class Cam(Sensor, ABC):
 		self.event_delay = event_delay
 		self.image_type = image_type
 		self.buffer_size = buffer_size
-		self.buffer = buffer
+		self.buffer = deque([], self.buffer_size)
 	
 	# Methods inherited from Sensor
 
