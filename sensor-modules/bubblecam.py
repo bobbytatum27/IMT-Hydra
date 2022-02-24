@@ -165,7 +165,7 @@ class BubbleCam(Cam):
 		finally:
 			self.camera.release()
 			self.logger.info("Successfully released camera.")
-	
+		
 	def detect_event(self):
 		"""
 		Triggers the Bubble Cam event response -> collects data and logs event time

@@ -7,16 +7,16 @@ class Sensor(ABC):
 
 	@abstractmethod
 	def power_on(self):
-		...
+		pass
 
 	@abstractmethod
 	def power_off(self):
-		...
+		pass
 
 	@abstractmethod
 	def write_data(self, filehandler):
-		...
+		pass
 
 	@abstractmethod
 	def collect_data(self):
-		...
+		pass
