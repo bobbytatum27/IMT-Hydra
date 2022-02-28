@@ -20,8 +20,9 @@ Repository Structure:
 - [ ] Implement Whitecap Cam
   - [ ] Change event trigger to a timer
 - [ ] Determine byte threshold for "interesting" images on Foam/Whitecap Cam
-- [ ] Create Class Hierarchy Diagram
-- [ ] Create State Transition Flowchart
+- [X] Create Class Hierarchy Diagram
+- [X] Create State Transition Flowchart
+- [X] Create Flowchart for sensors and add pseudocode
 - [ ] Implement Sensor Module/Submodules
 - [ ] Implement Comms Module
 - [ ] Implement Power Module
