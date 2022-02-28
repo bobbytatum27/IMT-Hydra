@@ -1,5 +1,3 @@
-
-# import abstract class
 from ..sensor import Sensor
 
 import serial
@@ -33,7 +31,7 @@ class Sita(Sensor):
   		call write_data() every 30 minutes
     """
 
-	# override abstract method
+	# Initialize Member Variables
 	def __init__(self, measureTimeLimit, measureInterval, baud_rate, port):
 		self.ser = serial.Serial(self.port, self.baud_rate)
 		self.measureTimeLimit = measureTimeLimit
@@ -42,7 +40,7 @@ class Sita(Sensor):
 		self.port = port
 
 	def power_on(self):
-		self.ser.flush()
+		""" Power on the SITA using the serial connection """
 		# powerup
         self.ser.write('\r\n:020605000100F2\r\n'.encode('utf-8'))
         time.sleep(1)
@@ -54,6 +52,7 @@ class Sita(Sensor):
         time.sleep(1)
 
 	def power_off(self):
+		""" Power off the SITA using the serial connection """
 		self.ser.write('\r\n:020605000000F3\r\n'.encode('utf-8'))
         time.sleep(0.2)
         self.ser.write('\r\n:020618000000E0\r\n'.encode('utf-8'))
@@ -61,6 +60,7 @@ class Sita(Sensor):
         time.sleep(2)
 
 	def write_data(self):
+		""" Write sensor SITA data to sita_log.txt in the same folder """
 		fdata = open('sita_log.txt','at')   
 		sampled = False
         measureStart = time.time()
@@ -82,6 +82,7 @@ class Sita(Sensor):
                         sampled = True
 
 	def collect_data(self):
+		""" Check the serial connection, collect data, and write data every 30 minutes """
 		# sanity check of serial connection
 		self.ser.flush()
 		if self.ser.in_waiting > 0:
