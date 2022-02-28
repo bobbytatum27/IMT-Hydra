@@ -6,6 +6,10 @@
 
 - ser: Serial
 - measureTimeLimit: int
+- measureInterval: int
+- baud_rate: int
+- port: String
+- timer: Timer
 
 ### Member methods inherited from Sensor
 
