@@ -17,7 +17,7 @@
   - turns on the SITA by making a serial connection
 - power_off()
   - turn off the SITA by closing serial connection
-- write_data(file_handler?)
+- write_data(data, file_handler)
   - write sensor data to file
 - collect_data()
   - collect data and call write_data()
