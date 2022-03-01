@@ -1,13 +1,14 @@
 # Python Standard Library Modules
 from abc import ABC, abstractmethod
 from collections import deque
+import multiprocessing as mp
 
 # Third Party Modules
 import EasyPySpin # PySpin Module
 
 # Local Modules
-from .sensor import Sensor # Abstract class Sensor
-from .state import State # Enums: {Quiescent, Storm, Event}
+from ..sensor import Sensor # Abstract class Sensor
+from ..state import State # Glider State
 
 # TODO(pkam): Add method headers
 class Cam(Sensor, ABC):
@@ -24,11 +25,11 @@ class Cam(Sensor, ABC):
     gamma : float
     fps : int
     backlight : int
-    current_state : Enum {Quiescent, Storm, Event}
     event_delay : int
     image_type : String
     buffer_size : int
     buffer : Deque
+    glider_state: Multiprocessing.Value
 
     Methods
     -------
@@ -55,20 +56,20 @@ class Cam(Sensor, ABC):
                 brightness: int, 
                 fps: int, 
                 backlight: int, 
-                current_state: State,
                 event_delay: int,
                 image_type: str,
-                buffer_size: int):
+                buffer_size: int,
+                initial_state: State):
         self.exposure = exposure
         self.gain = gain
         self.brightness = brightness
         self.fps = fps
         self.backlight = backlight
-        self.current_state = current_state
         self.event_delay = event_delay
         self.image_type = image_type
         self.buffer_size = buffer_size
         self.buffer = deque([], self.buffer_size)
+        self.glider_state = mp.Value("i", initial_state)
     
     # Methods inherited from Sensor
 
@@ -98,7 +99,8 @@ class Cam(Sensor, ABC):
         """
         Changes the state of the cam to the passed parameter
         """
-        self.current_state = next_state
+        with self.glider_state.get_lock():
+            self.glider_state.val = next_state
     
     @abstractmethod
     def detect_event(self):

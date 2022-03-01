@@ -4,6 +4,8 @@ import sys
 import RPi.GPIO as GPIO
 BUTTON_GPIO = 16
 
+# 1PPS Exploratory Code
+
 def signal_handler(sig, frame):
     GPIO.cleanup()
     sys.exit(0)
