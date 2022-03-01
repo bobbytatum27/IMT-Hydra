@@ -1,5 +1,7 @@
 import argparse
 from time import sleep
+import sys 
+
 from cameras.bubble_cam.bubblecam import BubbleCam
 from state import State
 
@@ -26,6 +28,8 @@ def parse_args():
     return parser.parse_args()
 
 if __name__ == '__main__':
+    sys.path.append('../..')
+
     args = parse_args()
 
     # init camera
