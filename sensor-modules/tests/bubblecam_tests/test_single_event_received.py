@@ -1,8 +1,7 @@
 import argparse
 from time import sleep
-
-from ...bubble_cam.bubblecam import BubbleCam
-from ....state import State
+from ...cameras.bubble_cam.bubblecam import BubbleCam
+from ...state import State
 
 def parse_args():
     parser = argparse.ArgumentParser()
