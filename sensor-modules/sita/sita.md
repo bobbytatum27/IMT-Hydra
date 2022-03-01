@@ -20,6 +20,9 @@
 - write_data(file_handler?)
   - write sensor data to file
 - collect_data()
-  - call write_data() every 30 minutes
+  - collect data and call write_data()
 
 ### Other member Methods
+
+- start_collection_workflow()
+  - helper method to call collect_data() every 30 minutes
