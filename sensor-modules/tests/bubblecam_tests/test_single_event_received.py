@@ -1,7 +1,6 @@
 import argparse
 from time import sleep
 
-from ...bubble_cam.bubblecam_config import *
 from ...bubble_cam.bubblecam import BubbleCam
 from ....state import State
 
