@@ -14,8 +14,6 @@ class Sita(Sensor):
     ser: Serial
 	measureTimeLimit: int
 	measureInterval: int
-	baud_rate: int
-	port: int
 	timer: Timer
 
     Methods
@@ -38,12 +36,10 @@ class Sita(Sensor):
     """
 
 	# Initialize Member Variables
-	def __init__(self, measureTimeLimit, measureInterval, baud_rate, port):
-		self.ser = serial.Serial(self.port, self.baud_rate)
+	def __init__(self, measureTimeLimit, measureInterval, baud_rate, port, timeout):
+		self.ser = serial.Serial(port, baud_rate, timeout)
 		self.measureTimeLimit = measureTimeLimit
 		self.measureInterval = measureInterval
-		self.baud_rate = baud_rate
-		self.port = port
 
 	def power_on(self):
 		""" Power on the SITA using the serial connection """
