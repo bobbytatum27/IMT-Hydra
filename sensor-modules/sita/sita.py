@@ -28,7 +28,13 @@ class Sita(Sensor):
 	write_data()
   		write sensor data to a text file in the same folder
 	collect_data()
-  		call write_data() every 30 minutes
+  		collect data and call write_data()
+	start_collection_workflow()
+  		start the data collection workflow by calling collect_data() every 30 minutes
+
+	TODO: 
+		- explore sleep times for powering and data collection/writing
+		- implement logging module
     """
 
 	# Initialize Member Variables
@@ -59,8 +65,12 @@ class Sita(Sensor):
         self.ser.close()
         time.sleep(2)
 
-	def write_data(self):
+	def write_data(self, line, fdata):
 		""" Write sensor SITA data to sita_log.txt in the same folder """
+		fdata.write(time.ctime(now)+' @ '+line+'\r\n')
+		
+	def collect_data(self):
+		""" Collect data from the SITA every 30 minutes and write it by calling write_data() """
 		fdata = open('sita_log.txt','at')   
 		sampled = False
         measureStart = time.time()
@@ -73,16 +83,18 @@ class Sita(Sensor):
                 now = time.time()
                 if len(line) > 20:
                     print(time.ctime(now)+' @ '+line+'\r\n')
-                    fdata.write(time.ctime(now)+' @ '+line+'\r\n')
+					# call of write_data()
+					self.write_data(line, fdata)
                     sampled = True
                 else:
                     if now > measureStart + self.measureTimeLimit:
                         print(time.ctime(now)+' @ SITA measurement timeout\r\n')
                         fdata.write(time.ctime(now)+' @ SITA measurement timeout\r\n')                     
-                        sampled = True
+                        sampled = True		
+	
+	def start_collection_workflow(self):
+		""" Start the data collection workflow by calling collect_data() every 30 minutes """
 
-	def collect_data(self):
-		""" Check the serial connection, collect data, and write data every 30 minutes """
 		# sanity check of serial connection
 		self.ser.flush()
 		if self.ser.in_waiting > 0:
@@ -90,5 +102,5 @@ class Sita(Sensor):
             print(line)
 
 		# setup timer
-		self.timer = Timer(self.measureInterval, self.write_data)
+		self.timer = Timer(self.measureInterval, self.collect_data)
 		self.timer.start()
