@@ -4,7 +4,6 @@ import logging
 import datetime
 import multiprocessing as mp
 from time import time
-from xmlrpc.client import Boolean
 
 # Copied from cSBC (Will remove unused modules as necessary)
 # Third Party Modules
@@ -165,32 +164,27 @@ class BubbleCam(Cam):
 					# It's very unlikely that we go from Wavebreak to Quiescent, but it is something to consider. Do we care about this edge case?
 					self.set_state(State.STORM)
 					self.set_camera_lockout(True)
-
-
 		except:
 			self.logger.error("Exception occurred", exc_info=True)
 		# release the camera and exit
 		finally:
 			self.power_off()
 			self.logger.info("Successfully released camera.")
-
-	# overriden from cam.set_state
-	def set_state(self, next_state: State):
+		
+	def detect_event(self):
+		"""
+		Triggers the Bubble Cam event response -> collects data and logs event time.
+		State transition only occurs when camera is not in lockout mode.
+		"""
 		# Only set the state if it's not lockout mode.
 		# If it is in lockout mode, use the time delta to see if 1 minute has passed.
 		if (bool(self.is_locked_out.value)):
 			if (time() - self.time_locked_out > self.event_delay):
 				self.set_camera_lockout(False)
 		else:
-			super().set_state(next_state)
-		
-	def detect_event(self):
-		"""
-		Triggers the Bubble Cam event response -> collects data and logs event time
-		"""
-		# set current_state to event state
-		self.set_state(State.WAVEBREAK)
-		self.logger.info(f"Event triggered at {self.getDateTimeIso()}")
+			# set current_state to event state
+			self.set_state(State.WAVEBREAK)
+			self.logger.info(f"Event triggered at {self.getDateTimeIso()}")
 
 	def set_camera_lockout(self, is_locked_out: bool):
 		# set the lockout variable

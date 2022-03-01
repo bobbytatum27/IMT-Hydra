@@ -46,6 +46,7 @@ if __name__ == '__main__':
     cam.set_state(State.STORM)
     # sleep for time it takes to fill up buffer and then a little bit more
     sleep(args['roll_buf_size'] / args['fps'] + 5)
-    cam.set_state(State.WAVEBREAK)
+    cam.detect_event()
+    cam.power_off()
 
      
