@@ -7,9 +7,6 @@ import cv2
 import datetime
 from queue import Queue
 
-# Data logging process/object
-# Shared variable for state enum
-
 class Cam():
 
     def __init__(self, 
