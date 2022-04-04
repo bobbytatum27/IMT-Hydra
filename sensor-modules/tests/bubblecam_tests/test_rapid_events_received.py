@@ -1,8 +1,10 @@
 import argparse
-from time import sleep
+import os
 import sys
+from time import sleep
 
 from ...cameras.bubble_cam.bubblecam import BubbleCam
+from ...cameras.bubble_cam.bubblecam_config import *
 from state import State
 
 def parse_args():
@@ -28,7 +30,17 @@ def parse_args():
     return parser.parse_args()
 
 if __name__ == '__main__':
+    print(
+        '''This script tests if the bubble cam system properly locksout after 2 events are received in rapid succession.
+        If events are received in rapid succession, it's expected that the camera system only captures images for the inital event received,
+        as after the system will be locked out from recording any other images for roughly 1 minute.
+        This script tests that behavior by comparing'''
+    )
+
     args = parse_args()
+
+    # save num images in target directory BEFORE new images are captured
+    num_images_before_test = len([img for img in os.listdir('IMAGE_DIR') if os.path.isfile(img)])
 
     # init camera
     cam = BubbleCam(
@@ -45,8 +57,12 @@ if __name__ == '__main__':
     cam.power_on()
     cam.set_state(State.STORM)
     # sleep for time it takes to fill up buffer and then a little bit more
-    sleep(args['roll_buf_size'] / args['fps'] + 5)
+    sleep(args['roll_buf_size'] / args['fps'] + 10)
     cam.detect_event()
-    cam.power_off()
+    cam.detect_event()
 
-     
+    num_images_captured = num_images_before_test - len([img for img in os.listdir('IMAGE_DIR') if os.path.isfile(img)])
+    expected_num_images_to_capture = args['roll_buf_size']
+    print(f'Captured {num_images_before_test} images, expected {expected_num_images_to_capture}.')
+
+    cam.power_off()
