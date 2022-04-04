@@ -50,3 +50,4 @@ Questions for meeting
 ## Week 4
 - [ ] Get MET1 feather working with the supervisor
 - [ ] Implement pub/sub for state between RPi (supervisor) and cams (Latte Pandas)
+- [ ] Test SITA and MET1
