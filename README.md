@@ -51,3 +51,6 @@ Questions for meeting
 - [ ] Get MET1 feather working with the supervisor
 - [ ] Implement pub/sub for state between RPi (supervisor) and cams (Latte Pandas)
 - [ ] Test SITA and MET1
+
+## Week 5 onwards
+- [ ] Implement Power Module
