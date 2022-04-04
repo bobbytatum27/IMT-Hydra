@@ -37,7 +37,7 @@ Questions for meeting
 * What logging convention should we use (for cams, for SITA/MET1)?
 
 - [ ] GPS sync time with RPi and Latte Pandas
-- [ ] Reimplement bubblecam
+- [ ] Reimplement bubblecam using composition (vs inheritance)
 - [ ] Napkin math for SITA and MET1 storage capacity
 
 ## Week 3
