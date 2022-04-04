@@ -28,3 +28,25 @@ Repository Structure:
 - [ ] Implement Power Module
   - Note: Include bidrectional comms support
 - [ ] Implement Logging Module
+
+# Spring Quarter
+## Week 2
+Questions for meeting
+* What times work best for undergrad meeting?
+* Can we just use the GPS to set system time of the SBCs? Do we need 1pps and if so how would we use it?
+* What logging convention should we use (for cams, for SITA/MET1)?
+
+- [ ] GPS sync time with RPi and Latte Pandas
+- [ ] Reimplement bubblecam
+- [ ] Napkin math for SITA and MET1 storage capacity
+
+## Week 3
+- [ ] Test reimplementation of bubblecam (current functionality + data quality check)
+- [ ] Implement logger module (concurrent to bubblecam)
+- [ ] Test logger module
+- [ ] Reimplement foam and white cap cam
+- [ ] Test reimplementation of foam and white cap cam
+
+## Week 4
+- [ ] Get MET1 feather working with the supervisor
+- [ ] Implement pub/sub for state between RPi (supervisor) and cams (Latte Pandas)
