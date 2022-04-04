@@ -36,7 +36,7 @@ Questions for meeting
 * Can we just use the GPS to set system time of the SBCs? Do we need 1pps and if so how would we use it?
 * What logging convention should we use (for cams, for SITA/MET1)?
 
-- [ ] GPS sync time with RPi and Latte Pandas
+- [ ] GPS time logging for RPi and LPs
 - [ ] Reimplement bubblecam using composition (vs inheritance)
 - [ ] Napkin math for SITA and MET1 storage capacity
 
