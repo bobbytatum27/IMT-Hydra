@@ -2,8 +2,10 @@ import logging
 
 class Logger():
     
-    def __init__(self, level: str, path: str, name: str):
-        format_string = '%(asctime)s : T%(relativeCreated)05ds : %(levelname)-8s - %(name)s : %(message)s'
+    def __init__(self, isCam: bool, cam: str, level: str, path: str, name: str):
+        self.isCam = isCam
+        self.cam = cam
+        format_string = '%(asctime)s : %(message)s'
         format_date = '%Y-%m-%dT%H:%M:%S'
 
         # BASIC CONFIG
@@ -11,7 +13,7 @@ class Logger():
             logging.basicConfig(filename=path, filemode='a', format=format_string, datefmt=format_date)
 
         # START LOGGER
-        logger = logging.getLogger(name)
+        self.logger = logging.getLogger(name)
 
         if path is None:
             # DEFINE FORMAT 
@@ -21,15 +23,15 @@ class Logger():
             logger.addHandler(handler)
 
         # LEVEL SET
-        logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.DEBUG)
 
-        logger.info('TEST')
+        self.logger.info('BEGIN LOGGING')
 
-        self.logger = logging.getLogger(__name__)
-        self.logger.info(f'START NEW EXECUTION\n\n{"=" * 36}\n')
+    def log_data(self, data: str):
+        if self.isCam:
+            self.logger.info(f'{self.cam.upper()}: {data}\n')
+    
+    
 
-    def log_data():
-        ...
-
-    def write_data():
-        ...
+# logger = Logger(True, "bcam", "info", "test.log", "bubblecam logs")
+# logger.log_data("Captured image")

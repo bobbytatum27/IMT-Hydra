@@ -44,15 +44,9 @@ class Cam():
         self.camera.set(cv2.CAP_PROP_FPS, self.fps)
         self.camera.set(cv2.CAP_PROP_BACKLIGHT, self.backlight)
 
-    def start_collection(self, queue):
+    def start_workflow(self, queue):
         self.capture_function(queue)
-        
-
     
 	# Misc Helpers
     def getDateTimeIso():
         return datetime.datetime.now().isoformat()
-        
-
-
-    
