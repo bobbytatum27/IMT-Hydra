@@ -1,2 +1,2 @@
-# add stats methods
+# add log_stats methods
 

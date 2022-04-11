@@ -21,9 +21,11 @@ class Cam():
                 image_type: str,
                 buffer_size: int,
                 initial_state: State):
+        """
+        Initializes the camera object
+        """
 
         self.camera = EasyPySpin.VideoCapture(0)
-
         self.name = name # name of camera (bubble, foam, or whitecap)
         self.capture_function = capture_function
         self.exposure = exposure
@@ -47,6 +49,20 @@ class Cam():
     def start_workflow(self, queue):
         self.capture_function(queue)
     
-	# Misc Helpers
+    def capture_image(self):
+        """
+        Captures an image from the camera and returns it as a numpy array
+        """
+        return self.camera.read()
+
+    def power_off(self):
+        """
+        Powers off the camera
+        """
+        self.camera.release()
+    
     def getDateTimeIso():
+        """
+        Returns the current date and time in ISO format 
+        """
         return datetime.datetime.now().isoformat()
