@@ -3,17 +3,17 @@ import os
 import logging
 import datetime
 import multiprocessing as mp
-from collections import deque
+from time import time
 
 # Copied from cSBC (Will remove unused modules as necessary)
 # Third Party Modules
 import cv2
-import EasyPySpin
+import EasyPySpin # We might be able to remove this
 
 # Local Modules
-from config.bubblecam_config import * # Cam config constants
-from .cam import Cam
-from .state import State # Enums: {Quiescent, Storm, Event}
+from bubblecam_config import * # Cam config constants
+from ..cam import Cam
+from ...state import State # Glider States
 
 class BubbleCam(Cam):
 	"""
@@ -29,11 +29,12 @@ class BubbleCam(Cam):
     gamma : float
     fps : int
     backlight : int
-    current_state : Enum {Quiescent, Storm, Event}
     event_delay : int
     image_type : String
     buffer_size : int
     buffer : Deque
+	initial_state: State
+	is_locked_out: Multiprocessing.Value
 
     Methods
     -------
@@ -59,12 +60,12 @@ class BubbleCam(Cam):
 				brightness: int, 
 				fps: int, 
 				backlight: int, 
-				current_state: State,
 				event_delay: int,
 				image_type: str,
-				buffer_size: int):
-		super().__init__(exposure, gain, brightness, fps, backlight, 
-						current_state, event_delay, image_type, buffer_size)
+				buffer_size: int,
+				initial_state: State):
+		super().__init__(exposure, gain, brightness, fps, backlight, event_delay, 
+						image_type, buffer_size, initial_state)
 
 		# Create logger
 		logging.basicConfig(
@@ -77,15 +78,15 @@ class BubbleCam(Cam):
 
 		logger = logging.getLogger()
 		logger.debug(f"Logger created for {__file__}.")
-		
-		# Create a shared variable to track state across processes
-		self.shared_state = mp.Value("i", current_state)
 
-		# Start another process to run collect_data() in the background 
+		# Another process to run collect_data() in the background 
 		self.collect_data_proc = mp.Process(
             target=self.collect_data,
-            args=(self.shared_state),
+            args=(self.glider_state),
         )
+		# For locking out the camera when an event occurs
+		self.is_locked_out = mp.Value("i", False)
+
 		
 	# Methods inherited from Sensor via Cam
 	def power_on(self):
@@ -119,34 +120,35 @@ class BubbleCam(Cam):
 		os.mkdir(dtime_path)
 
 		try:
-			# number images in order
-			num_captured = 0
+			num_captured = 0 # number images in order
+			start_time = time() # time the write speed
 
 			# reverse rolling buffer to get last image captured first and write to disk
 			for img in list(reversed(self.buffer)):
 				img_str = f"img_{num_captured}" + IMG_TYPE
 				img.tofile(os.path.join(dtime_path, img_str)) 
-
-				# increment counters and log write
 				num_captured += 1
 
-			self.logger.debug(f"Wrote {num_captured} images to disk at {dtime_path}.")
-			return num_captured
+			write_speed = time() - start_time
+			self.logger.debug(f"Wrote {num_captured} images to disk at {dtime_path} in {write_speed} seconds.")
+			return num_captured, write_speed
 		except:
 			self.logger.error("Exception occurred", exc_info=True)
+			return 0, None
 
-	def collect_data(self, shared_state):
+	def collect_data(self):
 		"""
 		Continuously log data in a double-ended queue.
 		"""
 		try:	
 			while True:
-				if shared_state.value == State.Storm:
+				if self.glider_state.value == State.STORM:
 					# in Storm state read frame, encode image, append to rolling buffer
+					# TODO(pkam): check success & result values since these ops can fail
 					success, frame = self.camera.read()
 					result, img = cv2.imencode(IMG_TYPE, frame)
 					self.buffer.append(img)
-				elif shared_state.value == State.WAVEBREAK:
+				elif self.glider_state.value == State.WAVEBREAK:
 					# in Wavebreak Event state, call write_data() to store data on disk
 					if len(self.buffer) != 0:
 						self.logger.debug(f"Writing images to disk.")
@@ -156,28 +158,41 @@ class BubbleCam(Cam):
 					else:
 						self.logger.debug(f"Buffer empty. Did not write any images to disk.")
 
-					# change state to Storm
-					with self.shared_state.get_lock():
-						self.shared_state.val = State.Storm
+					# Lockout camera for 60 seconds, but resume storm state.
+					# TODO(pkam): Determine what to do if STORM state is NOT the right state to return to. 
+					# (i.e.) Storm -> Wavebreak -> Quiescent
+					# It's very unlikely that we go from Wavebreak to Quiescent, but it is something to consider. Do we care about this edge case?
+					self.set_state(State.STORM)
+					self.set_camera_lockout(True)
 		except:
 			self.logger.error("Exception occurred", exc_info=True)
 		# release the camera and exit
 		finally:
-			self.camera.release()
+			self.power_off()
 			self.logger.info("Successfully released camera.")
 		
 	def detect_event(self):
 		"""
-		Triggers the Bubble Cam event response -> collects data and logs event time
+		Triggers the Bubble Cam event response -> collects data and logs event time.
+		State transition only occurs when camera is not in lockout mode.
 		"""
-		# set current_state to event 
-		self.set_state(State.WAVEBREAK)
+		# Only set the state if it's not lockout mode.
+		# If it is in lockout mode, use the time delta to see if 1 minute has passed.
+		if (bool(self.is_locked_out.value)):
+			if (time() - self.time_locked_out > self.event_delay):
+				self.set_camera_lockout(False)
+		else:
+			# set current_state to event state
+			self.set_state(State.WAVEBREAK)
+			self.logger.info(f"Event triggered at {self.getDateTimeIso()}")
 
-		# set shared_state to event (must get lock first)
-		with self.shared_state.get_lock():
-			self.shared_state.val = State.WAVEBREAK
-
-		self.logger.info(f"Event triggered at {self.getDateTimeIso()}")
+	def set_camera_lockout(self, is_locked_out: bool):
+		# set the lockout variable
+		with self.is_locked_out.lock():
+			self.is_locked_out.value = is_locked_out
+		# if lockout mode entered, save the time at which it started for later use in computing total lockout time
+		if (is_locked_out):
+			self.time_locked_out = time()
 
 	# Misc Helpers
 	def getDateTimeIso():
