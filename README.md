@@ -33,17 +33,17 @@ Repository Structure:
 ## Week 2
 Questions for meeting
 * What times work best for undergrad meeting?
-- TBD
+TBD
 * Can we just use the GPS to set system time of the SBCs? Do we need 1pps and if so how would we use it?
-- Log 1pps pulse with measurement logs and sync them up later
-- Find out how to connect GPS with Latte Pandas
+Log 1pps pulse with measurement logs and sync them up later
+Find out how to connect GPS with Latte Pandas
 * What logging convention should we use (for cams, for SITA/MET1)?
-- Low data rate
-- Human readable
-- Serves as activity log for cameras
+Low data rate
+Human readable
+Serves as activity log for cameras
 * Recruiting
-- Job posting
-- Share with student-orgs: ACM, Triton Robotics (tritonrobotics@ucsd.edu)
+Job posting
+Share with student-orgs: ACM, Triton Robotics (tritonrobotics@ucsd.edu)
 
 - [ ] GPS time logging for RPi and LPs
 - [ ] Reimplement bubblecam using composition (vs inheritance)
