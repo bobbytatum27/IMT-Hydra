@@ -2,10 +2,10 @@ import logging
 
 class Logger():
     
-    def __init__(self, isCam: bool, cam: str, level: str, path: str, name: str):
+    def __init__(self, isCam: bool, name: str, level: str, path: str, nameLog: str):
         self.isCam = isCam
-        self.cam = cam
-        format_string = '%(asctime)s : %(message)s'
+        self.name = name
+        format_string = f'[%(asctime)s: {self.name.upper()}: %(levelname)s] : %(message)s'
         format_date = '%Y-%m-%dT%H:%M:%S'
 
         # BASIC CONFIG
@@ -13,7 +13,7 @@ class Logger():
             logging.basicConfig(filename=path, filemode='a', format=format_string, datefmt=format_date)
 
         # START LOGGER
-        self.logger = logging.getLogger(name)
+        self.logger = logging.getLogger(nameLog)
 
         if path is None:
             # DEFINE FORMAT 
@@ -29,7 +29,7 @@ class Logger():
 
     def log_data(self, data: str):
         if self.isCam:
-            self.logger.info(f'{self.cam.upper()}: {data}\n')
+            self.logger.info(f'{data}\n')
     
     
 
