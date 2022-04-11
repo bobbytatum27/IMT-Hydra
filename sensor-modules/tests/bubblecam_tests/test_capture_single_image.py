@@ -5,7 +5,7 @@ import argparse
 
 import EasyPySpin
 
-from ...bubble_cam.bubblecam_config import *
+from ...cameras.bubble_cam.bubblecam_config import *
 
 IMAGE_DIR = './single_image_test_results/'
 PROMPT = "Navigate to the open window. Press (s) to save the image and close the window, (q) to not save the image and close the window."

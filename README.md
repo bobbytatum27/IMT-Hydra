@@ -29,7 +29,36 @@ Repository Structure:
 - [ ] Implement Power Module
   - Note: Include bidrectional comms support
 - [ ] Implement Logging Module
-- [ ] Use composition to re-implement cams
-  - [ ] Bubble cam
-  - [ ] Foam cam
-  - [ ] White cap cam
+
+# Spring Quarter
+
+## Week 2
+
+Questions for meeting
+
+- What times work best for undergrad meeting? _TBD_
+- Can we just use the GPS to set system time of the SBCs? _Do we need 1pps and if so how would we use it? Log 1pps pulse with measurement logs and sync them up later. Find out how to connect GPS with Latte Pandas._
+- What logging convention should we use (for cams, for SITA/MET1)? _Low data rate. Human readable. Serves as activity log for cameras._
+- Recruiting: _Job posting. Share with student-orgs: ACM, Triton Robotics (tritonrobotics@ucsd.edu)._
+
+* [ ] GPS time logging for RPi and LPs
+* [ ] Reimplement bubblecam using composition (vs inheritance)
+* [ ] Napkin math for SITA and MET1 storage capacity
+
+## Week 3
+
+- [ ] Test reimplementation of bubblecam (current functionality + data quality check)
+- [ ] Implement logger module (concurrent to bubblecam)
+- [ ] Test logger module
+- [ ] Reimplement foam and white cap cam
+- [ ] Test reimplementation of foam and white cap cam
+
+## Week 4
+
+- [ ] Get MET1 feather working with the supervisor
+- [ ] Implement pub/sub for state between RPi (supervisor) and cams (Latte Pandas)
+- [ ] Test SITA and MET1
+
+## Week 5 onwards
+
+- [ ] Implement Power Module
