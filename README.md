@@ -52,7 +52,7 @@ Questions for meeting
 - [ ] Implement logger module (concurrent to bubblecam)
 - [ ] Test logger module
 
-# Week 4
+## Week 4
 
 - [ ] Reimplement foam and white cap cam
 - [ ] Test reimplementation of foam and white cap cam
