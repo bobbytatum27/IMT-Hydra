@@ -41,26 +41,26 @@ Questions for meeting
 - What logging convention should we use (for cams, for SITA/MET1)? _Low data rate. Human readable. Serves as activity log for cameras._
 - Recruiting: _Job posting. Share with student-orgs: ACM, Triton Robotics (tritonrobotics@ucsd.edu)._
 
-## Week 2
-
 - [x] GPS time logging for RPi
-- [ ] Reimplement bubblecam using composition (vs inheritance)
+- [X] Implement cam Module (composition)
 
 ## Week 3
 
-- [ ] Test reimplementation of bubblecam (current functionality + data quality check)
-- [ ] Implement logger module (concurrent to bubblecam)
-- [ ] Test logger module
+- [X] Implement logger module (concurrent to bubblecam)
+- [X] Implement bubblecam moduel (compisition)
 
 ## Week 4
 
+- [ ] Test logger module
+- [ ] Test reimplementation of bubblecam (current functionality + data quality check)
 - [ ] Reimplement foam and white cap cam
 - [ ] Test reimplementation of foam and white cap cam
-- [ ] GPS time logging for Latte Pandas
-- [ ] Napkin math for SITA and MET1 storage capacity (needs logging sample)
+
 
 ## Week 5
 
+- [ ] GPS time logging for Latte Pandas
+- [ ] Napkin math for SITA and MET1 storage capacity (needs logging sample)
 - [ ] Get MET1 feather working with the supervisor
 - [ ] Implement pub/sub for state between RPi (supervisor) and cams (Latte Pandas)
 - [ ] Test SITA and MET1
