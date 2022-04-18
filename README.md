@@ -42,23 +42,30 @@ Questions for meeting
 - Recruiting: _Job posting. Share with student-orgs: ACM, Triton Robotics (tritonrobotics@ucsd.edu)._
 
 - [x] GPS time logging for RPi
-- [ ] Reimplement bubblecam using composition (vs inheritance)
+- [X] Implement cam Module (composition)
 
 ## Week 3
 
-- [ ] Test reimplementation of bubblecam (current functionality + data quality check)
-- [ ] Implement logger module (concurrent to bubblecam)
+- [X] Implement logger module (concurrent to bubblecam)
+- [X] Implement bubblecam module (compisition)
+
+## Week 4
+
+Questions for meeting
+- What lockout time are we expecting? (currently averaging 3.3 seconds for 150-image write -- slow at the start)
+- For the buffer, is there a rate of capture that we want, or do we want every single frame (according to the cam fps)?
+- What size buffer do we want? (seconds into frames)
+- What format do we want to write data in? (currently png -- compressed)
+
 - [ ] Test logger module
-
-# Week 4
-
+- [ ] Test reimplementation of bubblecam (current functionality + data quality check)
 - [ ] Reimplement foam and white cap cam
 - [ ] Test reimplementation of foam and white cap cam
-- [ ] GPS time logging for Latte Pandas
-- [ ] Napkin math for SITA and MET1 storage capacity (needs logging sample)
 
 ## Week 5
 
+- [ ] GPS time logging for Latte Pandas
+- [ ] Napkin math for SITA and MET1 storage capacity (needs logging sample)
 - [ ] Get MET1 feather working with the supervisor
 - [ ] Implement pub/sub for state between RPi (supervisor) and cams (Latte Pandas)
 - [ ] Test SITA and MET1
