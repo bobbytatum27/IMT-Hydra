@@ -47,7 +47,7 @@ Questions for meeting
 ## Week 3
 
 - [X] Implement logger module (concurrent to bubblecam)
-- [X] Implement bubblecam moduel (compisition)
+- [X] Implement bubblecam module (compisition)
 
 ## Week 4
 
