@@ -52,7 +52,7 @@ Questions for meeting
 ## Week 4
 
 Questions for meeting
-- What lockout functionality are we expecting? (currently averaging 3.3 seconds for 150-image write -- slow at the start)
+- What lockout time are we expecting? (currently averaging 3.3 seconds for 150-image write -- slow at the start)
 - For the buffer, is there a rate of capture that we want, or do we want every single frame (according to the cam fps)?
 - What size buffer do we want? (seconds into frames)
 - What format do we want to write data in? (currently png -- compressed)
