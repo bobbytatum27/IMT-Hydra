@@ -64,6 +64,9 @@ Questions for meeting
 - [X] Test reimplementation of bubblecam (current functionality + data quality check)
 
 ## Week 5
+Questions for meeting
+- When camera is locked out, do we still want to capture images in the buffer?
+- Will I be able to come into the lab next week?
 
 - [ ] Make fixes to bubblecam and test again
 - [ ] Reimplement foam and white cap cam
