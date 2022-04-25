@@ -60,12 +60,16 @@ Questions for meeting
 - What format do we want to write data in? (currently png) _no compression_ 
 - Data validation to get rid of less interesting images
 
-- [ ] Test logger module
-- [ ] Test reimplementation of bubblecam (current functionality + data quality check)
+- [X] Test logger module
+- [X] Test reimplementation of bubblecam (current functionality + data quality check)
+
+## Week 5
+
+- [ ] Make fixes to bubblecam and test again
 - [ ] Reimplement foam and white cap cam
 - [ ] Test reimplementation of foam and white cap cam
 
-## Week 5
+## Week 6
 
 - [ ] GPS time logging for Latte Pandas
 - [ ] Napkin math for SITA and MET1 storage capacity (needs logging sample)
@@ -73,6 +77,6 @@ Questions for meeting
 - [ ] Implement pub/sub for state between RPi (supervisor) and cams (Latte Pandas)
 - [ ] Test SITA and MET1
 
-## Week 6 onwards
+## Week 7 onwards
 
 - [ ] Implement Power Module
