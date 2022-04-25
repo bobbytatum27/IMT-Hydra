@@ -33,9 +33,6 @@ class BubbleCam():
 					success, frame = self.cam.capture_image()
 					result, img = cv2.imencode(IMG_TYPE, frame)
 
-					# data validation 
-					if sys.getsizeof(img) < BYTE_THRESHOLD:
-						continue
 					with lock:
 						if not len(buffer) < self.cam.buffer_size:
 							buffer.popleft()
@@ -49,7 +46,7 @@ class BubbleCam():
 		"""
 		Write images from buffer into memory
 		"""
-		
+
 		def getDateTimeIso():
 				"""
 				Returns the current date and time in ISO format 
@@ -72,6 +69,9 @@ class BubbleCam():
 
 				# reverse rolling buffer to get last image captured first and write to disk
 				for img in list(reversed(buffer)):
+					# data validation 
+					if sys.getsizeof(img) < BYTE_THRESHOLD:
+						continue
 					img_str = f"img_{num_captured}" + IMG_TYPE
 					img.tofile(os.path.join(dtime_path, img_str)) 
 					num_captured += 1
