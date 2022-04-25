@@ -1,5 +1,3 @@
-# add check_stats methods
-
 import cv2
 import time
 from .logger import Logger
@@ -14,7 +12,7 @@ from bubblecam_config import * # Cam config constants
 class BubbleCam():
 
 	def __init__(self, logger: Logger):
-		self.logger = logger.logger
+		self.logger = logger
 		self.cam = Cam('bubblecam', capture_function, EXPOSURE, GAIN, BRIGHTNESS, GAMMA, FPS, BACKLIGHT, 0, IMG_TYPE, ROLL_BUF_SIZE)
 		self.glider_state = State.STORM
 
@@ -31,7 +29,7 @@ class BubbleCam():
 					# TODO(pkam): check success & result values since these ops can fail
 					success, frame = self.camera.read()
 					result, img = cv2.imencode(IMG_TYPE, frame)
-					queue.append(img) # right now it's an unlimited length queue, but we needd to find length of buffer
+					queue.append(img) 
 					self.logger.info("Captured image")
 			except:
 				self.logger.error("Exception occurred", exc_info=True)

@@ -9,7 +9,7 @@ Contains
 
 ########### Camera constants ###########
 # Maximum number of images in rolling buffer at once
-ROLL_BUF_SIZE = 150
+ROLL_BUF_SIZE = 100
 # Location of image directory to save images
 IMG_DIR = "bubblecam_images"
 # Type of image to save to disk

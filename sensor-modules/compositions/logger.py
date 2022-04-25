@@ -50,7 +50,6 @@ class Logger():
 		self.logger = logging.getLogger()
 		self.logger.debug(f"Logger created for {__file__}.")
 
-
     def consume(self, queue: Queue):
         """
         Used for consuming data from a shared variable (camera is the producer)
@@ -67,7 +66,7 @@ class Logger():
             try:
                 time.sleep(0.2)
                 # reverse rolling buffer to get last image captured first and write to disk
-                image = queue.get()
+                img = queue.get()
                 img_str = f"img_{num_captured}" + IMG_TYPE
                 img.tofile(os.path.join(dtime_path, img_str)) 
                 num_captured += 1
