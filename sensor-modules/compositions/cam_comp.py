@@ -1,6 +1,7 @@
 import queue
 from ..state import State # Enums: {Quiescent, Storm, Event}
 
+import cv2
 from typing import Callable
 import EasyPySpin # PySpin Module
 import datetime
@@ -53,8 +54,4 @@ class Cam():
         """
         self.camera.release()
     
-    def getDateTimeIso():
-        """
-        Returns the current date and time in ISO format 
-        """
-        return datetime.datetime.now().isoformat()
+    
