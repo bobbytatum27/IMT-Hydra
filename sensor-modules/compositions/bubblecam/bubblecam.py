@@ -7,15 +7,17 @@ import os
 from .logger import Logger
 from queue import Queue
 from .cam_comp import Cam
-from ..state import State # Glider States
+from .state import State # Glider States
 import threading
 
 from bubblecam_config import * # Cam config constants
 
 class BubbleCam():
 
-	def __init__(self, logger: Logger):
-		self.logger = logger
+	def __init__(self, clogger: Logger, wlogger: Logger):
+		# Capture and write logger (writes to separate files)
+		self.clogger = clogger.logger
+		self.wlogger = wlogger.logger
 		self.cam = Cam('bubblecam', self.capture_function, EXPOSURE, GAIN, BRIGHTNESS, GAMMA, FPS, BACKLIGHT, 0, IMG_TYPE, ROLL_BUF_SIZE)
 		self.glider_state = State.STORM
 
@@ -34,12 +36,13 @@ class BubbleCam():
 					result, img = cv2.imencode(IMG_TYPE, frame)
 
 					with lock:
+						# if buffer is full, remove the earliest image and add the latest image
 						if not len(buffer) < self.cam.buffer_size:
 							buffer.popleft()
 						buffer.append(img) 
-						self.logger.info("Captured image")
+						self.clogger.info("Captured image")
 			except:
-				self.logger.error("Exception occurred", exc_info=True)
+				self.clogger.error("Exception occurred", exc_info=True)
 
 
 	def write_images(self, buffer: deque, lock):
@@ -77,10 +80,10 @@ class BubbleCam():
 					num_captured += 1
 
 				write_speed = time() - start_time
-				self.logger.debug(f"Wrote {num_captured} images to disk at {dtime_path} in {write_speed} seconds.")
+				self.wlogger.debug(f"Wrote {num_captured} images to disk at {dtime_path} in {write_speed} seconds.")
 				return num_captured, write_speed
 			except:
-				self.logger.error("Exception occurred", exc_info=True)
+				self.wlogger.error("Exception occurred", exc_info=True)
 				return 0, None
 
 	
