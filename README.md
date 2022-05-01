@@ -68,11 +68,19 @@ Questions for meeting
 - When camera is locked out, do we still want to capture images in the buffer?
 - Will I be able to come into the lab next week?
 
-- [ ] Make fixes to bubblecam and test again
+- [X] Make fixes to bubblecam and test again
+- [ ] Devise more tests for edge cases
+
+## Week 6
+Points for meeting
+- Other tests to consider
+- Behrad software 
+
+- [ ] Finalize bubblecam
 - [ ] Reimplement foam and white cap cam
 - [ ] Test reimplementation of foam and white cap cam
 
-## Week 6
+## Week 7
 
 - [ ] GPS time logging for Latte Pandas
 - [ ] Napkin math for SITA and MET1 storage capacity (needs logging sample)
@@ -80,6 +88,6 @@ Questions for meeting
 - [ ] Implement pub/sub for state between RPi (supervisor) and cams (Latte Pandas)
 - [ ] Test SITA and MET1
 
-## Week 7 onwards
+## Week 8 onwards
 
 - [ ] Implement Power Module
