@@ -69,10 +69,11 @@ Questions for meeting
 - Will I be able to come into the lab next week?
 
 - [X] Make fixes to bubblecam and test again
-- [ ] Devise more tests for edge cases
+- [X] Devise more tests for edge cases
 
 ## Week 6
 Points for meeting
+- Bubblecam cannot ssh
 - Other tests to consider
 - Behrad software 
 
