@@ -18,6 +18,8 @@ IMG_DIR = "bubblecam_images"
 IMG_TYPE = ".png"
 # Amount of time in seconds to wait after event occurs
 EVENT_DELAY = 5
+# Amount of time in seconds to wait after writing
+LOCKOUT_DELAY = 60
 # Camera Settings
 EXPOSURE = 100000
 GAIN = 10

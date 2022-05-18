@@ -46,7 +46,8 @@ class Cam():
         """
         Captures an image from the camera and returns it as a numpy array
         """
-        return self.camera.read()
+        success, frame = self.camera.read()
+        return success, frame
 
     def power_off(self):
         """

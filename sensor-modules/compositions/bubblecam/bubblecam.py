@@ -19,7 +19,7 @@ class BubbleCam():
 		self.clogger = clogger.logger
 		self.wlogger = wlogger.logger
 		self.cam = Cam('bubblecam', self.capture_function, EXPOSURE, GAIN, BRIGHTNESS, GAMMA, FPS, BACKLIGHT, 0, IMG_TYPE, ROLL_BUF_SIZE)
-		self.glider_state = State.STORM
+		self.glider_state = State.QUIESCENT
 
 
 	def capture_function(self, buffer: deque, lock): # not sure if local reference for buffer is okay but will see in test
@@ -63,7 +63,7 @@ class BubbleCam():
 		start_time = time.time() # time the write speed
 		num_captured = 0 # number images in order
 
-		time.sleep(5) # scrappy solution to "look forward"
+		time.sleep(EVENT_DELAY) # scrappy solution to "look forward"
 		
 		with lock:
 			try:
@@ -85,7 +85,18 @@ class BubbleCam():
 			except:
 				self.wlogger.error("Exception occurred", exc_info=True)
 				return 0, None
+			finally:
+				time.sleep(LOCKOUT_DELAY)
 
+	def capture_image(self):
+		return self.cam.capture_image()
+
+	def start_workflow(self):
+		self.cam.start_workflow()
+		self.glider_state = State.STORM
+		self.clogger.info("Started workflow")
+		self.wlogger.info("Started workflow")
+		return True
 	
 	def power_off(self):
 		self.cam.power_off()
