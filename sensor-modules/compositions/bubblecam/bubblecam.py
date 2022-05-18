@@ -4,10 +4,10 @@ import datetime
 import time
 import sys
 import os
-from .logger import Logger
+from logger import Logger
 from queue import Queue
-from .cam_comp import Cam
-from .state import State # Glider States
+from cam_comp import Cam
+from state import State # Glider States
 import threading
 
 from bubblecam_config import * # Cam config constants

@@ -1,7 +1,7 @@
 from asyncore import write
 from bubblecam import BubbleCam
 from logger import Logger
-from .state import State
+from state import State
 from bubblecam_config import *
 from collections import deque
 import threading
