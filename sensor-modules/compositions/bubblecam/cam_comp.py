@@ -1,5 +1,5 @@
 import queue
-from .state import State # Enums: {Quiescent, Storm, Event}
+from state import State # Enums: {Quiescent, Storm, Event}
 
 import cv2
 from typing import Callable
@@ -11,7 +11,7 @@ class Cam():
 
     def __init__(self, 
                 name: str,
-                capture_function: Callable[...],
+                capture_function,
                 exposure: int, 
                 gain: int, 
                 brightness: int, 

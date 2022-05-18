@@ -13,7 +13,7 @@ class Logger():
         if isCam:
             LOG_MODE = 'write' if cam_log_write else 'capture'
 
-        LOG_FILENAME = f'logs/{LOG_FILE}_{LOG_MODE}.log'
+        LOG_FILENAME = f'./logs/{LOG_FILE}_{LOG_MODE}.log'
         
         # Create logger
         logging.basicConfig(
