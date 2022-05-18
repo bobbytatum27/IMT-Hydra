@@ -13,7 +13,9 @@ class Logger():
         if isCam:
             LOG_MODE = 'write' if cam_log_write else 'capture'
 
-        LOG_FILENAME = f'./logs/{LOG_FILE}_{LOG_MODE}.log'
+        currDate = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")
+        LOG_FILENAME = f'./logs/{currDate}_{LOG_FILE}_{LOG_MODE}.log'
+        open(LOG_FILENAME, 'w')
         
         # Create logger
         logging.basicConfig(
