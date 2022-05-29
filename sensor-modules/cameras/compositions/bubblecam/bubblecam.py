@@ -14,10 +14,9 @@ from bubblecam_config import * # Cam config constants
 
 class BubbleCam():
 
-	def __init__(self, clogger: Logger, wlogger: Logger):
+	def __init__(self, logger: Logger):
 		# Capture and write logger (writes to separate files)
-		self.clogger = clogger.logger
-		self.wlogger = wlogger.logger
+		self.logger = logger.logger
 		self.cam = Cam('bubblecam', self.capture_function, EXPOSURE, GAIN, BRIGHTNESS, GAMMA, FPS, BACKLIGHT, 0, IMG_TYPE, ROLL_BUF_SIZE)
 		self.glider_state = State.STORM
 
@@ -26,23 +25,27 @@ class BubbleCam():
 		"""
 		Continuously log data in a shared queue.
 		"""
+		index = 0
 		while True:
-			# time.sleep(0.1)
+			time.sleep(1)
 			try:	
-				if self.glider_state.value == State.STORM:
+				if self.glider_state == State.STORM:
 					# in Storm state read frame, encode image, append to rolling buffer
 					# TODO(pkam): check success & result values since these ops can fail
-					success, frame = self.cam.capture_image()
-					result, img = cv2.imencode(IMG_TYPE, frame)
+					# success, frame = self.cam.capture_image()
+					# result, img = cv2.imencode(IMG_TYPE, frame)
+					img = f'frame {index}'
 
 					with lock:
 						# if buffer is full, remove the earliest image and add the latest image
-						if not len(buffer) < self.cam.buffer_size:
+						if not len(buffer) < ROLL_BUF_SIZE:
 							buffer.popleft()
 						buffer.append(img) 
-						self.clogger.info("Captured image")
+						self.logger.info(f"Captured {img}")
+						print('Captured ', img)
+						index += 1
 			except:
-				self.clogger.error("Exception occurred", exc_info=True)
+				self.logger.error("Exception occurred", exc_info=True)
 
 
 	def write_images(self, buffer: deque, lock):
@@ -63,27 +66,32 @@ class BubbleCam():
 		start_time = time.time() # time the write speed
 		num_captured = 0 # number images in order
 
+		self.logger.info(f"WAVEBREAK detected: preparing to write to {dtime_path}")
+
 		time.sleep(5) # scrappy solution to "look forward"
 		
 		with lock:
 			try:
 				num_captured = 0 # number images in order
-				start_time = time() # time the write speed
+				start_time = time.time() # time the write speed
 
 				# reverse rolling buffer to get last image captured first and write to disk
 				for img in list(reversed(buffer)):
 					# data validation 
-					if sys.getsizeof(img) < BYTE_THRESHOLD:
-						continue
-					img_str = f"img_{num_captured}" + IMG_TYPE
-					img.tofile(os.path.join(dtime_path, img_str)) 
+					# if sys.getsizeof(img) < BYTE_THRESHOLD:
+					# 	continue
+					# img_str = f"img_{num_captured}" + IMG_TYPE
+					# img.tofile(os.path.join(dtime_path, img_str)) 
+					with open(f'{dtime_path}/{dtime_str}.txt', 'a') as f:
+						f.write(img)
 					num_captured += 1
 
-				write_speed = time() - start_time
-				self.wlogger.debug(f"Wrote {num_captured} images to disk at {dtime_path} in {write_speed} seconds.")
+				write_speed = time.time() - start_time
+				print('f"Wrote {num_captured} images to disk at {dtime_path} in {write_speed} seconds."')
+				self.logger.debug(f"Wrote {num_captured} images to disk at {dtime_path} in {write_speed} seconds.")
 				return num_captured, write_speed
 			except:
-				self.wlogger.error("Exception occurred", exc_info=True)
+				self.logger.error("Exception occurred", exc_info=True)
 				return 0, None
 
 	

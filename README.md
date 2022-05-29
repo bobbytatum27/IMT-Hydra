@@ -11,25 +11,6 @@ Repository Structure:
 - environment-validation
 - to-dos
 
-# ROADMAP
-
-- [x] Adapt Imran's Test Suite to utilize OOP-BubbleCam Implementation
-- [ ] Use Bubble Cam Implementation to Capture/Save Images
-  - [ ] Determine byte threshold for "interesting" Bubble Cam images
-  - [ ] Determine i/o speed for a completely full buffer
-- [ ] Revise Bubble Cam Implementation Method Names/Inheritance Hierarchy
-  - [ ] Determine list of all sensors that we can actually power on/off
-  - [ ] Change event trigger to a timer
-- [ ] Determine byte threshold for "interesting" images on Foam/Whitecap Cam
-- [x] Create Class Hierarchy Diagram
-- [x] Create State Transition Flowchart
-- [x] Create Flowchart for sensors and add pseudocode
-- [ ] Implement Sensor Module/Submodules
-- [ ] Implement Comms Module
-- [ ] Implement Power Module
-  - Note: Include bidrectional comms support
-- [ ] Implement Logging Module
-
 ### Expected Launch: February 2023
 
 # Spring Quarter
@@ -44,51 +25,61 @@ Questions for meeting
 - Recruiting: _Job posting. Share with student-orgs: ACM, Triton Robotics (tritonrobotics@ucsd.edu)._
 
 - [x] GPS time logging for RPi
-- [X] Implement cam Module (composition)
+- [x] Implement cam Module (composition)
 
 ## Week 3
 
-- [X] Implement logger module (concurrent to bubblecam)
-- [X] Implement bubblecam module (compisition)
+- [x] Implement logger module (concurrent to bubblecam)
+- [x] Implement bubblecam module (compisition)
 
 ## Week 4
 
 Questions for meeting
+
 - What lockout time are we expecting? (currently averaging 3.3 seconds for 150-image write -- slow at the start) _30 seconds_
 - For the buffer, is there a rate of capture that we want, or do we want every single frame (according to the cam fps)? _10fps for bubblecam/foamcam, 1 frame white cap cam_
 - What size buffer do we want? (seconds into frames) _5 seconds back and 5 seconds forward, 100 frames total_
-- What format do we want to write data in? (currently png) _no compression_ 
+- What format do we want to write data in? (currently png) _no compression_
 - Data validation to get rid of less interesting images
 
-- [X] Test logger module
-- [X] Test reimplementation of bubblecam (current functionality + data quality check)
+- [x] Test logger module
+- [x] Test reimplementation of bubblecam (current functionality + data quality check)
 
 ## Week 5
+
 Questions for meeting
+
 - When camera is locked out, do we still want to capture images in the buffer?
 - Will I be able to come into the lab next week?
 
-- [X] Make fixes to bubblecam and test again
-- [X] Devise more tests for edge cases
+- [x] Make fixes to bubblecam and test again
+- [x] Devise more tests for edge cases
 
 ## Week 6
+
 Points for meeting
+
 - Bubblecam cannot ssh
 - Other tests to consider
-- Behrad software 
+- Behrad software
+
+## Week 9
 
 - [ ] Finalize bubblecam
+  - [x] Finish thread testing
+  - [ ] Refine logging format
+  - [ ] Refine pre-post wavebreak capture window
+  - [ ] Capture real images
+
+## Week 10
+
 - [ ] Reimplement foam and white cap cam
 - [ ] Test reimplementation of foam and white cap cam
-
-## Week 7
-
-- [ ] GPS time logging for Latte Pandas
-- [ ] Napkin math for SITA and MET1 storage capacity (needs logging sample)
-- [ ] Get MET1 feather working with the supervisor
 - [ ] Implement pub/sub for state between RPi (supervisor) and cams (Latte Pandas)
+- [ ] GPS time logging for Latte Pandas
+- [ ] Get MET1 feather working with the supervisor
 - [ ] Test SITA and MET1
 
-## Week 8 onwards
+## Beyond
 
 - [ ] Implement Power Module

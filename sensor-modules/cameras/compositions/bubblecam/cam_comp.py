@@ -3,7 +3,7 @@ from state import State # Enums: {Quiescent, Storm, Event}
 
 import cv2
 from typing import Callable
-import EasyPySpin # PySpin Module
+# import EasyPySpin # PySpin Module
 import datetime
 from queue import Queue
 
@@ -25,19 +25,19 @@ class Cam():
         Initializes the camera object
         """
 
-        self.camera = EasyPySpin.VideoCapture(0)
+        # self.camera = EasyPySpin.VideoCapture(0)
         self.name = name # name of camera (bubble, foam, or whitecap)
         self.capture_function = capture_function
         # self.event_delay = event_delay
         # self.image_type = image_type
         self.buffer_size = buffer_size
 
-        self.camera.set(cv2.CAP_PROP_EXPOSURE, exposure)
-        self.camera.set(cv2.CAP_PROP_GAIN, gain)
-        self.camera.set(cv2.CAP_PROP_BRIGHTNESS, brightness)
-        self.camera.set(cv2.CAP_PROP_GAMMA, gamma)
-        self.camera.set(cv2.CAP_PROP_FPS, fps)
-        self.camera.set(cv2.CAP_PROP_BACKLIGHT, backlight)
+        # self.camera.set(cv2.CAP_PROP_EXPOSURE, exposure)
+        # self.camera.set(cv2.CAP_PROP_GAIN, gain)
+        # self.camera.set(cv2.CAP_PROP_BRIGHTNESS, brightness)
+        # self.camera.set(cv2.CAP_PROP_GAMMA, gamma)
+        # self.camera.set(cv2.CAP_PROP_FPS, fps)
+        # self.camera.set(cv2.CAP_PROP_BACKLIGHT, backlight)
 
     def start_workflow(self, queue):
         self.capture_function(queue)
